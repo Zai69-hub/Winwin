@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Combinations</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .copy-button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+            background-color: gray;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .copy-success {
+            background-color: green;
+            color: white;
+        }
+        .results {
+            display: inline-block;
+            border: 2px solid white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #333;
+            position: relative;
+        }
+        .results.success {
+            border-color: green;
+            background-color: #006400;
+        }
+        h2 {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate Combinations</h1>
+    <input type="text" id="inputNumbers" placeholder="Enter numbers (e.g., 678901)">
+    <button onclick="generateCombinations()">Generate</button>
+    
+    <div>
+        <h2>วิน 2 ตัว:</h2>
+        <button id="copyTwoDigitButton" class="copy-button" onclick="copyToClipboard('twoDigitResults', 'copyTwoDigitButton')">Copy วิน 2 ตัว</button>
+    </div>
+    <div id="twoDigitResults" class="results"></div>
+    
+    <div>
+        <h2>วิน 3 ตัว:</h2>
+        <button id="copyThreeDigitButton" class="copy-button" onclick="copyToClipboard('threeDigitResults', 'copyThreeDigitButton')">Copy วิน 3 ตัว</button>
+    </div>
+    <div id="threeDigitResults" class="results"></div>
+
+    <div>
+        <h2>วิน 2 ตัวร่วมเบิ้ล:</h2>
+        <button id="copyTwoDigitDuplicatesButton" class="copy-button" onclick="copyToClipboard('twoDigitDuplicatesResults', 'copyTwoDigitDuplicatesButton')">Copy วิน 2 ตัวร่วมเบิ้ล</button>
+    </div>
+    <div id="twoDigitDuplicatesResults" class="results"></div>
+
+    <div>
+        <h2>วิน 3 ตัวร่วมเบิ้ล:</h>
+        <button id="copyThreeDigitDuplicatesButton" class="copy-button" onclick="copyToClipboard('threeDigitDuplicatesResults', 'copyThreeDigitDuplicatesButton')">Copy วิน 3 ตัวร่วมเบิ้ล</button>
+    </div>
+    <div id="threeDigitDuplicatesResults" class="results"></div>
+
+    <div>
+        <h2>พี่น้อง:</h2>
+        <button id="copySiblingButton" class="copy-button" onclick="copyToClipboard('siblingResults', 'copySiblingButton')">Copy พี่น้อง</button>
+    </div>
+    <div id="siblingResults" class="results">01, 12, 23, 34, 45, 56, 67, 78, 89, 90</div>
+    
+    <div>
+        <h2>เรียง:</h2>
+        <button id="copySequentialButton" class="copy-button" onclick="copyToClipboard('sequentialResults', 'copySequentialButton')">Copy เรียง</button>
+    </div>
+    <div id="sequentialResults" class="results">123, 234, 345, 456, 567, 678, 789, 890, 901</div>
+    
+    <div>
+        <h2>ชุดขาว:</h2>
+        <button id="copyWhiteSetButton" class="copy-button" onclick="copyToClipboard('whiteSetResults', 'copyWhiteSetButton')">Copy ชุดขาว</button>
+    </div>
+    <div id="whiteSetResults" class="results">
+        100, 211, 122, 133, 144, 155, 166, 177, 188, 199,<br>
+        200, 311, 322, 233, 244, 255, 266, 277, 288, 299,<br>
+        300, 411, 422, 433, 344, 355, 366, 377, 388, 399,<br>
+        400, 511, 522, 533, 544, 455, 466, 477, 488, 499,<br>
+        500, 611, 622, 633, 644, 655, 566, 577, 588, 599,<br>
+        600, 711, 722, 733, 744, 755, 766, 677, 688, 699,<br>
+        700, 811, 822, 833, 844, 855, 866, 877, 788, 799,<br>
+        800, 911, 922, 933, 944, 955, 966, 977, 988, 899,<br>
+        900, 011, 022, 033, 044, 055, 066, 077, 088, 099,<br>
+        001, 002, 003, 004, 005, 006, 007, 008, 009, 112,<br>
+        113, 114, 115, 116, 117, 118, 119, 110, 221, 223,<br>
+        224, 225, 226, 227, 228, 229, 220, 331, 332, 334,<br>
+        335, 336, 337, 338, 339, 330, 441, 442, 443, 445,<br>
+        446, 448, 447, 449, 440, 551, 552, 553, 554, 556,<br>
+        557, 558, 559, 550, 661, 662, 663, 664, 665, 667,<br>
+        668, 669, 660, 771, 772, 773, 774, 775, 776, 778,<br>
+        779, 770, 881, 882, 883, 884, 885, 886, 887, 889,<br>
+        880, 991, 992, 993, 994, 995, 996, 997, 998, 990,<br>
+        010, 121, 212, 313, 414, 515, 616, 717, 818, 919,<br>
+        020, 131, 232, 323, 424, 525, 626, 727, 828, 929,<br>
+        030, 141, 242, 343, 434, 535, 636, 737, 838, 939,<br>
+        040, 151, 252, 353, 454, 545, 646, 747, 848, 949,<br>
+        050, 161, 262, 363, 464, 565, 656, 757, 858, 959,<br>
+        060, 171, 272, 373, 474, 575, 676, 767, 868, 969,<br>
+        070, 181, 282, 383, 484, 585, 686, 787, 878, 979,<br>
+        080, 191, 292, 393, 494, 595, 696, 797, 898, 989,<br>
+        090, 101, 202, 303, 404, 505, 606, 707, 808, 909
+    </div>
+
+    <div>
+        <h2>เบิ้ลหน้า:</h2>
+        <button id="copyFrontDoubleButton" class="copy-button" onclick="copyToClipboard('frontDoubleResults', 'copyFrontDoubleButton')">Copy เบิ้ลหน้า</button>
+    </div>
+    <div id="frontDoubleResults" class="results">
+        001, 002, 003, 004, 005, 006, 007, 008, 009, 112, 113,<br>
+        114, 115, 116, 117, 118, 119, 110, 221, 223, 224, 225,<br>
+        226, 227, 228, 229, 220, 331, 332, 334, 335, 336, 337,<br>
+        338, 339, 330, 441, 442, 443, 445, 446, 448, 447, 449,<br>
+        440, 551, 552, 553, 554, 556, 557, 558, 559, 550, 661,<br>
+        662, 663, 664, 665, 667, 668, 669, 660, 771, 772, 773,<br>
+         774, 775, 776, 778, 779, 770, 881, 882, 883, 884, 885,<br>
+         886, 887, 889, 880, 991, 992, 993, 994, 995, 996, 997,<br>
+         998, 990
+    </div>
+    
+    <div>
+        <h2>เบิ้ลหลัง:</h2>
+        <button id="copyBackDoubleButton" class="copy-button" onclick="copyToClipboard('backDoubleResults', 'copyBackDoubleButton')">Copy เบิ้ลหลัง</button>
+    </div>
+    <div id="backDoubleResults" class="results">
+        100, 211, 122, 133, 144, 155, 166, 177, 188, 199,<br>
+        200, 311, 322, 233, 244, 255, 266, 277, 288, 299,<br>
+        300, 411, 422, 433, 344, 355, 366, 377, 388, 399,<br>
+        400, 511, 522, 533, 544, 455, 466, 477, 488, 499,<br>
+        500, 611, 622, 633, 644, 655, 566, 577, 588, 599,<br>
+        600, 711, 722, 733, 744, 755, 766, 677, 688, 699,<br>
+        700, 811, 822, 833, 844, 855, 866, 877, 788, 799,<br>
+        800, 911, 922, 933, 944, 955, 966, 977, 988, 899,<br>
+        900, 011, 022, 033, 044, 055, 066, 077, 088, 099
+    </div>
+    
+    <div>
+        <h2>หาม:</h2>
+        <button id="copyMirrorButton" class="copy-button" onclick="copyToClipboard('mirrorResults', 'copyMirrorButton')">Copy หาม</button>
+    </div>
+    <div id="mirrorResults" class="results">
+        010, 121, 212, 313, 414, 515, 616, 717, 818, 919,<br>
+        020, 131, 232, 323, 424, 525, 626, 727, 828, 929,<br>
+        030, 141, 242, 343, 434, 535, 636, 737, 838, 939,<br>
+        040, 151, 252, 353, 454, 545, 646, 747, 848, 949,<br>
+        050, 161, 262, 363, 464, 565, 656, 757, 858, 959,<br>
+        060, 171, 272, 373, 474, 575, 676, 767, 868, 969,<br>
+        070, 181, 282, 383, 484, 585, 686, 787, 878, 979,<br>
+        080, 191, 292, 393, 494, 595, 696, 797, 898, 989,<br>
+        090, 101, 202, 303, 404, 505, 606, 707, 808, 909
+    </div>
+    
+    <script>
+        let previousCopiedElement = null;
+
+        function generateCombinations() {
+            const inputNumbers = document.getElementById('inputNumbers').value;
+            const twoDigitResults = document.getElementById('twoDigitResults');
+            const threeDigitResults = document.getElementById('threeDigitResults');
+            const twoDigitDuplicatesResults = document.getElementById('twoDigitDuplicatesResults');
+            const threeDigitDuplicatesResults = document.getElementById('threeDigitDuplicatesResults');
+
+            // ฟังก์ชันสำหรับสร้างตัวเลข 2 หลัก
+            function generateTwoDigitCombinations(numbers) {
+                const combinations = [];
+                for (let i = 0; i < numbers.length; i++) {
+                    for (let j = i + 1; j < numbers.length; j++) {
+                        combinations.push(numbers[i] + numbers[j]);
+                    }
+                }
+                return combinations;
+            }
+
+            // ฟังก์ชันสำหรับสร้างตัวเลข 3 หลัก
+            function generateThreeDigitCombinations(numbers) {
+                const combinations = [];
+                for (let i = 0; i < numbers.length; i++) {
+                    for (let j = i + 1; j < numbers.length; j++) {
+                        for (let k = j + 1; k < numbers.length; k++) {
+                            combinations.push(numbers[i] + numbers[j] + numbers[k]);
+                        }
+                    }
+                }
+                return combinations;
+            }
+
+            // ฟังก์ชันสำหรับสร้างตัวเลข 2 หลักที่ซ้ำกัน
+            function generateTwoDigitDuplicates(numbers) {
+                const combinations = [];
+                for (let i = 0; i < numbers.length; i++) {
+                    combinations.push(numbers[i] + numbers[i]);
+                }
+                return combinations;
+            }
+
+            // ฟังก์ชันสำหรับสร้างตัวเลข 3 หลักที่ซ้ำกัน
+            function generateThreeDigitDuplicates(numbers) {
+                const combinations = [];
+                for (let i = 0; i < numbers.length; i++) {
+                    for (let j = 0; j < numbers.length; j++) {
+                        if (i !== j) {
+                            combinations.push(numbers[i] + numbers[j] + numbers[j]);
+                            combinations.push(numbers[i] + numbers[i] + numbers[j]);
+                        }
+                    }
+                }
+                return combinations;
+            }
+
+            // แสดงผลลัพธ์
+            const twoDigitCombinations = generateTwoDigitCombinations(inputNumbers);
+            const threeDigitCombinations = generateThreeDigitCombinations(inputNumbers);
+            const twoDigitDuplicates = generateTwoDigitDuplicates(inputNumbers).concat(twoDigitCombinations);
+            const threeDigitDuplicates = generateThreeDigitDuplicates(inputNumbers).concat(threeDigitCombinations);
+
+            twoDigitResults.innerHTML = twoDigitCombinations.join(', ');
+            threeDigitResults.innerHTML = threeDigitCombinations.join(', ');
+            twoDigitDuplicatesResults.innerHTML = twoDigitDuplicates.join(', ');
+            threeDigitDuplicatesResults.innerHTML = threeDigitDuplicates.join(', ');
+        }
+
+        function copyToClipboard(elementId, buttonId) {
+            const element = document.getElementById(elementId);
+            const button = document.getElementById(buttonId);
+            const range = document.createRange();
+            range.selectNode(element);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            
+            // เปลี่ยนสีของปุ่มเป็นสีเขียว
+            button.classList.add('copy-success');
+            button.innerText = 'Copied!';
+            
+            // เปลี่ยนสีของกรอบและตัวเลขเป็นสีเขียว
+            if (previousCopiedElement) {
+                previousCopiedElement.classList.remove('success');
+            }
+            element.classList.add('success');
+            previousCopiedElement = element;
+        }
+    </script>
+</body>
+</html>
