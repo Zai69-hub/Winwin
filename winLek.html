@@ -41,12 +41,22 @@
         h2 {
             display: inline-block;
         }
+        .input-container {
+            margin: 20px 0;
+        }
+        #inputNumbers {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <h1>Generate Combinations</h1>
-    <input type="text" id="inputNumbers" placeholder="Enter numbers (e.g., 678901)">
-    <button onclick="generateCombinations()">Generate</button>
+    <div class="input-container">
+        <input type="text" id="inputNumbers" placeholder="Enter numbers (e.g., 678901)" onkeydown="checkEnter(event)">
+        <button onclick="generateCombinations()">Generate</button>
+    </div>
     
     <div>
         <h2>วิน 2 ตัว:</h2>
@@ -67,7 +77,7 @@
     <div id="twoDigitDuplicatesResults" class="results"></div>
 
     <div>
-        <h2>วิน 3 ตัวร่วมเบิ้ล:</h>
+        <h2>วิน 3 ตัวร่วมเบิ้ล:</h2>
         <button id="copyThreeDigitDuplicatesButton" class="copy-button" onclick="copyToClipboard('threeDigitDuplicatesResults', 'copyThreeDigitDuplicatesButton')">Copy วิน 3 ตัวร่วมเบิ้ล</button>
     </div>
     <div id="threeDigitDuplicatesResults" class="results"></div>
@@ -168,13 +178,32 @@
     
     <script>
         let previousCopiedElement = null;
+        let previousCopiedButton = null;
+
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                generateCombinations();
+            }
+        }
 
         function generateCombinations() {
-            const inputNumbers = document.getElementById('inputNumbers').value;
+            const inputElement = document.getElementById('inputNumbers');
+            let inputNumbers = inputElement.value.replace(/\s/g, ''); // Remove spaces
             const twoDigitResults = document.getElementById('twoDigitResults');
             const threeDigitResults = document.getElementById('threeDigitResults');
             const twoDigitDuplicatesResults = document.getElementById('twoDigitDuplicatesResults');
             const threeDigitDuplicatesResults = document.getElementById('threeDigitDuplicatesResults');
+
+            // Reset previous results color
+            if (previousCopiedElement) {
+                previousCopiedElement.classList.remove('success');
+                previousCopiedElement = null;
+            }
+            if (previousCopiedButton) {
+                previousCopiedButton.classList.remove('copy-success');
+                previousCopiedButton.innerText = 'Copy';
+                previousCopiedButton = null;
+            }
 
             // ฟังก์ชันสำหรับสร้างตัวเลข 2 หลัก
             function generateTwoDigitCombinations(numbers) {
@@ -253,8 +282,13 @@
             if (previousCopiedElement) {
                 previousCopiedElement.classList.remove('success');
             }
+            if (previousCopiedButton) {
+                previousCopiedButton.classList.remove('copy-success');
+                previousCopiedButton.innerText = 'Copy';
+            }
             element.classList.add('success');
             previousCopiedElement = element;
+            previousCopiedButton = button;
         }
     </script>
 </body>
