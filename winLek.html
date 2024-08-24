@@ -254,18 +254,21 @@
                 return combinations;
             }
 
-            // ฟังก์ชันสำหรับสร้างตัวเลข 3 หลักที่ซ้ำกัน
+            // ฟังก์ชันสำหรับสร้างตัวเลข 3 หลักที่ซ้ำกันและกรองตัวเลขซ้ำ
             function generateThreeDigitDuplicates(numbers) {
-                const combinations = [];
+                const combinations = new Set();
                 for (let i = 0; i < numbers.length; i++) {
                     for (let j = 0; j < numbers.length; j++) {
                         if (i !== j) {
-                            combinations.push(numbers[i] + numbers[j] + numbers[j]);
-                            combinations.push(numbers[i] + numbers[i] + numbers[j]);
+                            // เฉพาะลำดับเดียวกันเท่านั้น เช่น 112, 221
+                            const firstCombo = numbers[i] + numbers[i] + numbers[j];
+                            const secondCombo = numbers[j] + numbers[j] + numbers[i];
+                            combinations.add(firstCombo);
+                            combinations.add(secondCombo);
                         }
                     }
                 }
-                return combinations;
+                return Array.from(combinations);
             }
 
             // แสดงผลลัพธ์
